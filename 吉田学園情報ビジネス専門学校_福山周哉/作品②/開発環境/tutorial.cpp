@@ -8,9 +8,15 @@
 #include "input.h"
 #include "fade.h"
 
+//マクロ定義
+#define MAX_TUTO_POLYGON (1)
+
 //グローバル変数
-LPDIRECT3DTEXTURE9 g_pTextureTutorial = NULL;																//背景のテクスチャ
-LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTutorial = NULL;															//背景
+LPDIRECT3DTEXTURE9 g_pTextureTutorial = NULL;													//背景のテクスチャ
+LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTutorial = NULL;												//背景
+
+LPDIRECT3DTEXTURE9 g_pTextureTutoPol[MAX_TUTO_POLYGON] = {};									//ポリゴンのテクスチャ
+LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTutoPol = NULL;												//バッファのポリゴン
 
 //===========================================================================================================
 //初期化処理
@@ -24,6 +30,7 @@ HRESULT InitTutorial(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\tutorial.png", &g_pTextureTutorial);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\press_enter.png", &g_pTextureTutoPol[0]);
 
 	//頂点バッファの生成
 	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &g_pVtxBuffTutorial, NULL)))
@@ -34,6 +41,7 @@ HRESULT InitTutorial(void)
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuffTutorial->Lock(0, 0, (void**)&pVtx, 0);
 
+	//カラーの設定
 	pVtx[0].pos = D3DXVECTOR3(0, SCREEN_HEIGHT, 0.0f);
 	pVtx[1].pos = D3DXVECTOR3(0, 0, 0.0f);
 	pVtx[2].pos = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f);
@@ -81,6 +89,13 @@ void UninitTutorial(void)
 		g_pTextureTutorial->Release();
 		g_pTextureTutorial = NULL;
 	}
+
+	//ポリゴンの頂点バッファの開放
+	if (g_pVtxBuffTutoPol != NULL)
+	{
+		g_pVtxBuffTutoPol->Release();
+		g_pVtxBuffTutoPol = NULL;
+	}
 }
 
 //===========================================================================================================
@@ -113,4 +128,11 @@ void DrawTutorial(void)
 
 	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+	//PressEnter
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, g_pVtxBuffTutorial, 0, sizeof(VERTEX_2D));
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_2D);
 }

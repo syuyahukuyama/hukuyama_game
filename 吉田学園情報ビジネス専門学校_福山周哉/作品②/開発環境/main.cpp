@@ -286,7 +286,6 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		//フェードの初期化処理
 		InitFade(MODE_TITLE);
 
-
 	return S_OK;
 }
 
@@ -406,8 +405,6 @@ void Update(void)
 //=================================================================================================
 void Draw(void)
 {
-	
-
 	//バックバッファ&バッファのクリア
 	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 	if (SUCCEEDED(g_pD3DDevice->BeginScene()))

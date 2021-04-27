@@ -7,7 +7,6 @@
 #include "title.h"
 #include "input.h"
 #include "fade.h"
-//#include "sound.h"
 
 //=================================================================================================
 //マクロ定義
@@ -26,6 +25,9 @@ LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffTitle = NULL;													//バッファのタイトル
 LPDIRECT3DTEXTURE9 g_pTexturePolygon[MAX_TITLE_POLYGON] = {};									//ポリゴンのテクスチャ
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffPolygon = NULL;												//バッファのポリゴン
 D3DXVECTOR3 g_posPolygon;
+
+D3DXCOLOR g_col;
+bool g_bPressEnter;
 
 bool nCntShape;
 int nCount;
@@ -98,13 +100,14 @@ HRESULT InitTitle(void)
 	{
 		switch (nPolygon)
 		{
+		//タイトル
 		case 0:
 			pVtx[0].pos = D3DXVECTOR3(200, POLYGON_HEIGHT, 0.0f);
 			pVtx[1].pos = D3DXVECTOR3(200, 100, 0.0f);
 			pVtx[2].pos = D3DXVECTOR3(POLYGON_WIDTH, POLYGON_HEIGHT, 0.0f);
 			pVtx[3].pos = D3DXVECTOR3(POLYGON_WIDTH, 100, 0.0f);
 			break;
-
+		//PRESSエンター
 		case 1:
 			pVtx[0].pos = D3DXVECTOR3(200, 650, 0.0f);
 			pVtx[1].pos = D3DXVECTOR3(200, 550, 0.0f);
@@ -176,21 +179,60 @@ void UninitTitle(void)
 //=================================================================================================
 void UpdateTitle(void)
 {
+	//変数宣言
+	VERTEX_2D *pVtx;
+
 	//変数の更新
 	nCount++;
 
-	//ポリゴンの点滅
-	if (nCount % 30 == 0)
-	{
-		nCntShape = nCntShape ? false : true;
-	}
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	g_pVtxBuffPolygon->Lock(0, 0, (void**)&pVtx, 0);
 
 	//ENTERキーを押した
 	if (GetKeyboardTrigger(DIK_RETURN) == true)
 	{
-		SetFade(FADE_OUT, MODE_TUTORIAL);
+		g_bPressEnter = true;
+
+		//カウントの初期化
+		nCount = 0;
+	}
+	
+	if (g_bPressEnter == false)
+	{
+
+		//ポリゴンの点滅
+		if (0 == nCount % 50)
+		{
+			g_col.a = 0.0f;
+		}
+		else if (25 == nCount % 50)
+		{
+			g_col.a = 1.0f;
+		}
+	}
+	else
+	{
+		if (0 == nCount % 8)
+		{
+			g_col.a = 0.0f;
+		}
+		else if (4 == nCount % 8)
+		{
+			g_col.a = 1.0f;
+		}
+		if (nCount >= 40)
+		{
+			SetFade(FADE_OUT, MODE_TUTORIAL);
+		}
 	}
 
+	pVtx[4].col = D3DXCOLOR(255, 255, 255, g_col.a);
+	pVtx[5].col = D3DXCOLOR(255, 255, 255, g_col.a);
+	pVtx[6].col = D3DXCOLOR(255, 255, 255, g_col.a);
+	pVtx[7].col = D3DXCOLOR(255, 255, 255, g_col.a);
+
+	//頂点バッファをアンロックする
+	g_pVtxBuffPolygon->Unlock();
 }
 
 //=================================================================================================
@@ -225,7 +267,19 @@ void DrawTitle(void)
 		//テクスチャの設定
 		pDevice->SetTexture(0, g_pTexturePolygon[nPolygon]);
 
-		//ポリゴンの描画
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nPolygon * 4, 2);
+		switch (nPolygon)
+		{
+		case 0:
+			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nPolygon * 4, 2);
+			break;
+
+		case 1:
+			//ポリゴンの描画
+			if (nCntShape == true)
+			{
+				pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nPolygon * 4, 2);
+			}
+			break;
+		}
 	}
 }

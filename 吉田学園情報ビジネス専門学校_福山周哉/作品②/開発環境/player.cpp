@@ -158,6 +158,7 @@ void UninitPlayer(void)
 //===========================================================================================================
 void UpdatePlayer(void)
 {
+	//•Ï”éŒ¾
 	VERTEX_2D *pVtx;
 	PLAYER *pPlayer;
 	BLOCK *pBlock;

@@ -1,9 +1,12 @@
 ﻿  Bg.cpp
-  main.cpp
+Bg.cpp(133): warning C4244: '引数': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Bg.cpp(134): warning C4244: '引数': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Bg.cpp(135): warning C4244: '引数': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
+Bg.cpp(136): warning C4244: '引数': 'double' から 'FLOAT' への変換です。データが失われる可能性があります。
   コード生成しています。
-  0 of 103 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 103 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   actionDirectX.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\actionDirectX\Release\actionDirectX.exe
   actionDirectX.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\actionDirectX\Release\actionDirectX.pdb (Full PDB)

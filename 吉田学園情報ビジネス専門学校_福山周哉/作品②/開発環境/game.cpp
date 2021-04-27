@@ -194,21 +194,6 @@ void UpdateGame(void)
 		UpdateExplosion();
 	}
 
-	//クリアリザルト画面へ飛ぶ処理
-	//int nCntEnemy = GetCntEnemy();
-
-	/*if (GetKeyboardTrigger(DIK_RETURN) == true)
-	{
-		g_pResult = GAMECLAER_RESULT;
-		SetFade(FADE_OUT, MODE_RESULT);
-	}*/
-
-	////ゲームオーバーリザルト画面の飛ぶ処理
-	//if (pPlayer->nZan == 0)
-	//{
-	//	g_pResult = GAMEOVER_RESULT;
-	//	SetFade(FADE_OUT, MODE_RESULT);
-	//}
 	if (GetKeyboardTrigger(DIK_S))
 	{
 		SetFade(FADE_OUT, MODE_SELECT);
